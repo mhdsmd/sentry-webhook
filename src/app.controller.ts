@@ -34,26 +34,24 @@ export class AppController {
   webhooks(@Body() reqBody: SentryRequestType) {
     const running = async () => {
       try {
-        this.logger.info(reqBody);
-        const { issue } = reqBody.data;
-        if (!this.appHelper.isAllowNotification(issue.project.slug)) {
-          this.logger.info(
-            'This app slug "${issue.project.slug}" is not allowed for push notifications !!!',
-          );
-          return;
-        }
-        const issueDetails = await this.appService.getIssueDetail(issue.id);
-        const hookMessageData: HookMessageDataType = {
-          issueAction: reqBody.action,
-          appName: issue.project.name,
-          title: issue.title,
-          errorPosition: issue.culprit,
-          detailLink: `https://${process.env.SENTRY_ORGANIZATION_SLUG}.sentry.io/issues/${issue.id}`,
-          ...issueDetails,
-        };
-        this.appService.sentTelegramMessage(hookMessageData);
+        this.logger.info('hit webhook endpoint');
+        const { error } = reqBody.data;
+        // this.logger.info('issue', reqBody.data);
+        // const hookMessageData: HookMessageDataType = {
+        //   issueAction: reqBody.action,
+        //   appName: error.project.name,
+        //   title: error.title,
+        //   errorPosition: error.culprit,
+        //   detailLink: error.url,
+        //   ...issueDetails,
+        // };
+        this.appService.sentTelegramMessage({
+          title: error.title,
+          detailLink: error.web_url,
+          appName: error.transaction,
+        });
       } catch (ex) {
-        this.logger.error(ex);
+        this.logger.error('Error in webhook endpoint', ex);
       }
     };
     running();

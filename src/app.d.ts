@@ -30,8 +30,11 @@ export type SentryMetadataType = {
 };
 
 export type SentryRequestDataType = {
-  issue: {
+  error: {
     id: string;
+    url: string;
+    web_url: string;
+    transaction: string;
     shareId: string;
     shortId: string;
     title: string;

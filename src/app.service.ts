@@ -34,7 +34,7 @@ export class AppService {
   async getIssueDetail(issueId): Promise<HookMessageDataType> {
     const { data } = await axios({
       method: 'get',
-      url: `https://sentry.io/api/0/organizations/${process.env.SENTRY_ORGANIZATION_SLUG}/issues/${issueId}/tags/`,
+      url: `https://sentry.hamravesh.com/api/0/organizations/${process.env.SENTRY_ORGANIZATION_SLUG}/issues/${issueId}/tags/`,
       headers: {
         Authorization: `Bearer ${process.env.SENTRY_INTEGRATION_TOKEN}`,
       },
